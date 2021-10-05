@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import "../App.css";
+//import "../App.css";
 import useApi from "./Utils/useApi";
 import Paper from "@material-ui/core/Paper";
 import { ColumnChooser, Toolbar } from "@devexpress/dx-react-grid-material-ui";
@@ -299,7 +299,7 @@ const ScheduleTable = () => {
   };
 
   return (
-    <div className="uxf-main-container">
+    <div className="container">
       <span>Total rows selected: {selection.length}</span>
       <Paper>
         <Grid rows={rows} columns={columns} getRowId={getRowId}>

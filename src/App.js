@@ -8,22 +8,21 @@ import { BrowserRouter as Router, useHistory, Switch, Route } from "react-router
 import Schedules from "./components/pages/Schedules";
 import Help from "./components/pages/Help";
 import ContactUs from "./components/pages/ContactUs";
-import "@deere/ux.uxframe-core/dist/css/uxframe.min.css";
+import "./test.css"
 import { Security, SecureRoute, LoginCallback } from '@okta/okta-react';
 import { OktaAuth, toRelativeUrl } from '@okta/okta-auth-js';
 import Login from './Login';
-import { oktaAuthConfig, oktaSignInConfig } from './config';
-import { createHashHistory } from "history";
+import { oktaAuthConfig, oktaSignInConfig } from './config'; 
 
-const history = createHashHistory();
-const oktaAuth = new OktaAuth(oktaAuthConfig);
-const customAuthHandler = () => {
-  history.push('/login');
-};
-const restoreOriginalUri = async (_oktaAuth, originalUri) => {
-  history.replace(toRelativeUrl(originalUri, window.location.origin));
-};
 function App() {
+  const history = useHistory();
+  const oktaAuth = new OktaAuth(oktaAuthConfig);
+  const customAuthHandler = () => {
+    history.push('/login');
+  };
+  const restoreOriginalUri = async (_oktaAuth, originalUri) => {
+    history.replace(toRelativeUrl(originalUri || "/", window.location.origin));
+  };
 
 
   return (
@@ -38,12 +37,19 @@ function App() {
               restoreOriginalUri={restoreOriginalUri}
             >
               <Switch>
+              <Route
+                  path="/"
+                  render={({ match: { url } }) => (
+                <>
                 <Route path="/" exact={true} component={Home} />
-                <SecureRoute path="/schedules" component={Schedules} />
+                <SecureRoute path={"/schedules"} exact={true} component={Schedules} />
                 <SecureRoute path="/help" component={Help} />
                 <Route path="/contact-us" component={ContactUs} />
                 <Route path='/login' render={() => <Login config={oktaSignInConfig} />} />
                 <Route path='/login/callback' component={LoginCallback} />
+                </>
+                )}
+                />
               </Switch>
             </Security>
           </Router>
